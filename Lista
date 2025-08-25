@@ -1,0 +1,73 @@
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+
+# Ruta de salida PDF
+pdf_path = "/mnt/data/Suministros_formato_nuevo.pdf"
+
+# Crear documento
+doc = SimpleDocTemplate(pdf_path, pagesize=letter)
+elements = []
+
+# Estilos
+styles = getSampleStyleSheet()
+style_title = styles["Heading1"]
+style_title.textColor = colors.HexColor("#003366")
+style_normal = styles["Normal"]
+
+# Encabezado
+elements.append(Paragraph("Suministros Delta", style_title))
+elements.append(Paragraph("Calle Reforma #1914, San Luis Potosí", style_normal))
+elements.append(Spacer(1, 12))
+elements.append(Paragraph("<b>COTIZACIÓN</b>", style_title))
+elements.append(Paragraph("San Luis Potosí, San Luis Potosí a 20 de Agosto del 2025", style_normal))
+elements.append(Paragraph("A la Escuela primaria “Felipe de Jesus Chapa” San Francisco de Zúñiga, Doctor Arroyo, Nuevo León.", style_normal))
+elements.append(Spacer(1, 12))
+
+# Datos de la tabla (basado en lo que extrajimos)
+data = [
+    ["Cantidad", "Descripción", "Precio Unitario", "Precio Neto"],
+    ["1", "Bodega escolar 4m x 4m...", "$65,000.00", "$65,000.00"],
+    ["1", "Sanitario escolar de dos módulos...", "$87,000.00", "$87,000.00"],
+    ["1", "Resbaladilla metálica...", "$10,000.00", "$10,000.00"],
+    ["1", "Columpio metálico...", "$6,500.00", "$6,500.00"],
+    ["1", "Desayunador metálico...", "$10,000.00", "$10,000.00"],
+    ["3", "Caja hojas de máquina t/c", "$1,100.00", "$3,300.00"],
+    ["1", "Caja hojas de máquina t/o", "$2,500.00", "$2,500.00"],
+    ["100", "Pliegos papel bond cuadriculados", "$5.50", "$550.00"],
+    ["2", "Papel contac jumbo rollo", "$269.00", "$568.00"],
+    ["1", "Juego de geometría madera", "$860.00", "$860.00"],
+    ["4", "Balón de vóleybol", "$150.00", "$600.00"],
+    ["100", "Carpeta color beige", "$7.50", "$750.00"],
+    ["10", "Paquete hojas de color", "$200.00", "$2,000.00"],
+    ["300", "Cartulina", "$8.00", "$2,400.00"],
+    ["1", "Pizarrón de corcho", "$2,900.00", "$2,900.00"],
+    ["36", "Marcadores magistral", "$50.00", "$1,800.00"],
+    ["100", "Lápices de madera no.2", "$5.00", "$500.00"],
+    ["20", "Caja lápices de colores c/12", "$80.00", "$1,600.00"],
+    ["2", "Mesa plegable 2.40m", "$2,100.00", "$4,200.00"],
+    ["20", "Caja plastilina", "$15.00", "$300.00"],
+    ["25", "Libreta profesional de raya", "$40.00", "$1,000.00"],
+    ["25", "Libreta profesional de cuadro", "$40.00", "$1,000.00"],
+    ["", "Total", "", "$205,328.00"]
+]
+
+# Crear tabla
+table = Table(data, colWidths=[60, 260, 100, 100])
+table.setStyle(TableStyle([
+    ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#003366")),
+    ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+    ("ALIGN", (0,0), (-1,-1), "CENTER"),
+    ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+    ("FONTSIZE", (0,0), (-1,0), 11),
+    ("BOTTOMPADDING", (0,0), (-1,0), 8),
+    ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
+]))
+
+elements.append(table)
+
+# Construir PDF
+doc.build(elements)
+
+pdf_path
